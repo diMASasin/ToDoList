@@ -15,17 +15,15 @@
         Padding="30,0"
         VerticalOptions="Start">
 
-            <HorizontalStackLayout
-                HorizontalOptions="CenterAndExpand"
-                Spacing="20">
+            <Grid ColumnDefinitions="*, 45" ColumnSpacing="20" Padding="10" MaximumWidthRequest="800">
 
                 <Editor
                     AutoSize="TextChanges"
-                    WidthRequest="250"
                     x:Name="EnterText"
                     Text="{Binding CurrentText}"/>
 
                 <Button
+                    Grid.Column="1"
                     Text="+"
                     CornerRadius="25"
                     FontSize="Title"
@@ -35,81 +33,80 @@
                     Command="{Binding AddItemCommand}"
                     CommandParameter="{Binding Source = {x:Reference EnterText}, Path=Text}"/>
 
-            </HorizontalStackLayout>
+            </Grid>
 
             <ListView ItemsSource="{Binding TaskItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="MauiApp2:TaskItem">
                         <ViewCell>
-                            <FlexLayout JustifyContent="Center" MaximumWidthRequest="750"  Margin="5">
-                                <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
-                                    <CheckBox x:Name="checkBox" VerticalOptions="Center"></CheckBox>
+                            <Grid ColumnDefinitions="45, *, 60, 45" ColumnSpacing="20" Padding="10" MaximumWidthRequest="1000">
+                                <CheckBox x:Name="checkBox" VerticalOptions="Center"></CheckBox>
 
-                                    <Editor VerticalTextAlignment = "Center" HorizontalOptions="StartAndExpand" AutoSize="TextChanges"
-                                           Text="{Binding Text}" WidthRequest="500" IsReadOnly="True" Background="DodgerBlue">
-                                        <Editor.Triggers>
-                                            <DataTrigger 
+                                <Editor AutoSize="TextChanges" MinimumWidthRequest="100"
+                                           Text="{Binding Text}" IsReadOnly="True" Background="DodgerBlue" Grid.Column="1">
+                                    <Editor.Triggers>
+                                        <DataTrigger 
                                                 Binding = "{Binding Source = {x:Reference checkBox}, Path=IsChecked}"
                                                 Value="true"
                                                 TargetType="Editor">
-                                                <Setter Property = "Background" Value="DarkSlateGray"/>
-                                                <Setter Property = "TextColor" Value="Gray"/>
-                                                <Setter Property = "FontAttributes" Value="Italic"/>
-                                                <Setter Property = "IsReadOnly" Value="True"/>
-                                            </DataTrigger>
-                                            <DataTrigger 
+                                            <Setter Property = "Background" Value="DarkSlateGray"/>
+                                            <Setter Property = "TextColor" Value="Gray"/>
+                                            <Setter Property = "FontAttributes" Value="Italic"/>
+                                            <Setter Property = "IsReadOnly" Value="True"/>
+                                        </DataTrigger>
+                                        <DataTrigger 
                                                 Binding = "{Binding IsEditingModeOn}"
                                                 Value="true"
                                                 TargetType="Editor">
-                                                <Setter Property = "IsReadOnly" Value="False"/>
-                                            </DataTrigger>
-                                        </Editor.Triggers>
-                                    </Editor>
+                                            <Setter Property = "IsReadOnly" Value="False"/>
+                                        </DataTrigger>
+                                    </Editor.Triggers>
+                                </Editor>
 
-                                    <Button
+                                <Button
                                         Text="ред" CornerRadius="20" BackgroundColor="CornflowerBlue" x:Name="editButton"
-                                        TextColor="White" Scale="0.9" HeightRequest="20"
+                                        TextColor="White" Scale="0.9" HeightRequest="20" Grid.Column="2"
                                         Command="{Binding EditItemCommand}"
                                         CommandParameter="{Binding}">
-                                        <Button.Triggers>
-                                            <DataTrigger
+                                    <Button.Triggers>
+                                        <DataTrigger
                                                 Binding = "{Binding Source = {x:Reference checkBox}, Path=IsChecked}"
                                                 Value="true"
                                                 TargetType="Button">
-                                                <Setter Property = "IsEnabled" Value="False"/>
-                                            </DataTrigger>
-                                            <DataTrigger
+                                            <Setter Property = "IsEnabled" Value="False"/>
+                                        </DataTrigger>
+                                        <DataTrigger
                                                 Binding = "{Binding Source = {x:Reference checkBox}, Path=IsChecked}"
                                                 Value="false"
                                                 TargetType="Button">
-                                                <Setter Property = "IsEnabled" Value="True"/>
-                                            </DataTrigger>
-                                            <DataTrigger
+                                            <Setter Property = "IsEnabled" Value="True"/>
+                                        </DataTrigger>
+                                        <DataTrigger
                                                 Binding = "{Binding IsEditingModeOn}"
                                                 Value="True"
                                                 TargetType="Button">
-                                                <Setter Property = "IsVisible" Value="False"/>
-                                            </DataTrigger>
-                                        </Button.Triggers>
-                                    </Button>
+                                            <Setter Property = "IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
 
-                                    <Button
+                                <Button
                                         Text="ОК"
-                                        CornerRadius="25"
+                                        CornerRadius="20"
                                         BackgroundColor="CornflowerBlue"
                                         TextColor="White"
                                         HeightRequest="40"
                                         Command="{Binding ApplyItemCommand}"
-                                        IsVisible="{Binding IsEditingModeOn}"/>
+                                        IsVisible="{Binding IsEditingModeOn}"
+                                        Grid.Column="2"/>
 
-                                    <Button
+                                <Button
                                         Text="X" CornerRadius="25" BackgroundColor="Red"
-                                        TextColor="White" Scale="0.9" HeightRequest="20"
+                                        TextColor="White" Scale="0.9" HeightRequest="20" Grid.Column="3"
                                         Command="{Binding Source={RelativeSource FindAncestorBindingContext, 
                                                     AncestorType={x:Type MauiApp2:MainViewModel}}, Path=DeleteItemCommand}"
                                         CommandParameter="{Binding}"/>
-                                </HorizontalStackLayout>
-                            </FlexLayout>
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
